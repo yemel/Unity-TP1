@@ -35,18 +35,24 @@ public class AsteroidController : MonoBehaviour {
 				
 		this.transform.position = new Vector3(xPos, 0, zPos);
 		
-		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
+//		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
 		gameObject.rigidbody.velocity = new Vector3(xMove, 0, zMove);
 //		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);		
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+		
 		// Deactivate the asteroid when it reachs a camera border
 		float cameraSize = (float) Camera.main.camera.orthographicSize + 3.0f;
 		if(this.transform.position.z < -cameraSize || this.transform.position.z > cameraSize ||
 			this.transform.position.x < -cameraSize || this.transform.position.x > cameraSize) {
 			this.gameObject.SetActiveRecursively(false);
-		}	
+		}
+	}
+	
+	void OnTriggerEnter(Collider other) {
+		Debug.Log("ouch with " + other.gameObject);
 	}
 }
