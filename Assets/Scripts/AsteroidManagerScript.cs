@@ -7,10 +7,16 @@ public class AsteroidManagerScript : MonoBehaviour {
 	private List<GameObject> disableAsteroids;
 	
 	public int asteroidsCache = 50;
+	
+	public float spawnTwoAsteroidsProb;
+	public float spawnFourAsteroidsProb;
+	
+	public float changeProabilityTime;
+	public float lastChangeProabilityTime;
 	public float spawnTime;
+	private float lastSpawnTime;
 	
 	private Vector3 bigScale, mediumScale, smallScale;
-	private float lastSpawnTime;
 	
 	private static int smallScore = 277;
 	private static int mediumScore = 184;
@@ -20,8 +26,14 @@ public class AsteroidManagerScript : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		spawnTwoAsteroidsProb = 0.25F;
+		spawnFourAsteroidsProb = 0.1F;
+		
 		spawnTime = 5F;
 		lastSpawnTime = 0F;
+		
+		changeProabilityTime = 30F;
+		lastChangeProabilityTime = 0F;
 		
 		bigScale = new Vector3(32, 17, 17);
 		mediumScale = new Vector3(18, 10, 10);
@@ -40,17 +52,26 @@ public class AsteroidManagerScript : MonoBehaviour {
 	void Update () {
 		if(getGameManager().getCurrentLives() == 0) return; 
 		
+		lastChangeProabilityTime += Time.deltaTime;
+		if(lastChangeProabilityTime >= changeProabilityTime && spawnTwoAsteroidsProb < 0.5F) {
+			lastChangeProabilityTime = 0F;
+			spawnTwoAsteroidsProb += 0.025F;
+			spawnFourAsteroidsProb += 0.025F;
+		}
+		
 		lastSpawnTime += Time.deltaTime;
+		
 		if(lastSpawnTime >= spawnTime) {
 			lastSpawnTime = 0F;
 			spawnTime -= 0.05F;
 			Debug.Log("saque 1");
 			spawnNewAsteroid();
 			float randSpawn = Random.Range(0F,1F);
-			if(randSpawn < 0.25F) {
+			if(randSpawn < spawnTwoAsteroidsProb) {
 				spawnNewAsteroid();
 				Debug.Log("saque 2");
-			} else if(randSpawn < 0.1) {
+			} 
+			if(randSpawn < spawnFourAsteroidsProb) {
 				spawnNewAsteroid();
 				spawnNewAsteroid();
 				Debug.Log("saque 4");
