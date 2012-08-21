@@ -6,6 +6,8 @@ public class AsteroidController : MonoBehaviour {
 	private float xMove, zMove;
 	private BulletManagerScript bulletManagerScript;
 	private AsteroidManagerScript asteroidManager;
+	private GameManagerScript gameManager;
+	private ShipController shipController;
 	
 	void Start () {
 	}
@@ -29,6 +31,7 @@ public class AsteroidController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		asteroidManager = getAsteroidManager();
 		bulletManagerScript = getBulletManager();
+		gameManager = getGameManager();
 		
 		if(other.CompareTag("Bullet")) {
 			this.gameObject.active = false;
@@ -37,8 +40,8 @@ public class AsteroidController : MonoBehaviour {
 			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), this.transform.position, this.transform.rotation);
 			asteroidManager.hitAsteroid(this.gameObject);
 		} else if(other.CompareTag("Ship")) {
-			DestroyObject(other.gameObject);
-			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), other.gameObject.transform.position, other.gameObject.transform.rotation);
+			shipController = getShipController();
+			shipController.crashShip();
 		}
 	}
 	
@@ -85,5 +88,21 @@ public class AsteroidController : MonoBehaviour {
 //		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
 		gameObject.rigidbody.velocity = new Vector3(xMove, 0, zMove);
 //		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);
+	}
+	
+	private GameManagerScript getGameManager() {
+		if(gameManager == null) {
+			gameManager = (GameManagerScript) GameObject.FindGameObjectWithTag("GameManager").GetComponent(typeof(GameManagerScript));
+		}
+		
+		return gameManager;
+	}
+
+	private ShipController getShipController() {
+		if(shipController == null) {
+			shipController = (ShipController) GameObject.FindGameObjectWithTag("Ship").GetComponent(typeof(ShipController));
+		}
+		
+		return shipController;
 	}
 }

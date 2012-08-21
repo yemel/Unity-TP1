@@ -12,6 +12,8 @@ public class AsteroidManagerScript : MonoBehaviour {
 	private Vector3 bigScale, mediumScale, smallScale;
 	private float lastSpawnTime;
 	
+	private GameManagerScript gameManager;
+	
 	// Use this for initialization
 	void Start () {
 		spawnTime = 5F;
@@ -44,10 +46,13 @@ public class AsteroidManagerScript : MonoBehaviour {
 	}
 	
 	public void hitAsteroid(GameObject asteroid) {
+		int newScore = 0;
+		
 		Quaternion rotationVector = Quaternion.AngleAxis(90, Vector3.forward);
 		float xRand = Random.Range(0.75F,1F);
 		float zRand = Random.Range(0.75F,1F);				
 		if(asteroid.transform.localScale.Equals(bigScale)) {
+			newScore = 200;
 			for(int i = 0; i < 2; i++) {
 				GameObject currAsteroid = getAsteroid();
 				currAsteroid.transform.localScale = mediumScale;
@@ -63,7 +68,13 @@ public class AsteroidManagerScript : MonoBehaviour {
 				currAsteroid.transform.position = asteroid.transform.position;
 				currAsteroid.rigidbody.AddForce(xRand * 5F,0,zRand * 5F, ForceMode.Impulse);
 			}
+			newScore = 500;
+		} else {
+			newScore = 1000;	
 		}
+		
+		gameManager = getGameManager();
+		gameManager.addScore(newScore);
 	}
 	
 	private GameObject getAsteroid() {
@@ -84,6 +95,14 @@ public class AsteroidManagerScript : MonoBehaviour {
 		asteroid.SetActiveRecursively(false);
 		enableAsteroids.Remove(asteroid);
 		disableAsteroids.Add(asteroid);
+	}
+	
+	private GameManagerScript getGameManager() {
+		if(gameManager == null) {
+			gameManager = (GameManagerScript) GameObject.FindGameObjectWithTag("GameManager").GetComponent(typeof(GameManagerScript));
+		}
+		
+		return gameManager;
 	}
 		
 }
