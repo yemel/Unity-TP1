@@ -38,6 +38,8 @@ public class AsteroidManagerScript : MonoBehaviour {
 	}
 	
 	void Update () {
+		if(getGameManager().getCurrentLives() == 0) return; 
+		
 		lastSpawnTime += Time.deltaTime;
 		if(lastSpawnTime >= spawnTime) {
 			lastSpawnTime = 0F;

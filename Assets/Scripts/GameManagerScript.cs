@@ -7,6 +7,8 @@ public class GameManagerScript : MonoBehaviour {
 	private int currentScore;
 	private int currentLives;
 	
+	public GUISkin mySkin;
+	
 	// Use this for initialization
 	void Start () {
 		highScore = PlayerPrefs.GetInt("highScore", 0);
@@ -42,17 +44,23 @@ public class GameManagerScript : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-		GUI.Label(new Rect(Screen.width - 160, Screen.height - 40 , 160, 40), "High Score: " + highScore);
-		GUI.Label(new Rect(20, Screen.height - 40 , 190, 30), "Score: " + currentScore);
-		GUI.Label(new Rect(20, 20, 160, 40), "Lives: "+ currentLives);
+		GUIStyle style = new GUIStyle();
+		style.fontSize = 18;
+		style.font = mySkin.font;
+		style.normal.textColor = Color.white;
+	
+		GUI.Label(new Rect(20, 20, 100, 40), "Lives: "+ currentLives, style);
+		GUI.Label(new Rect(150, 20, 160, 40), "Score: " + currentScore, style);
+		GUI.Label(new Rect(Screen.width - 300, 20, 300, 40), "High Score: " + highScore, style);
 		
 		if(currentLives == 0) {
-			GUI.Label(new Rect((Screen.width-160)/2, (Screen.height-40)/2 , 160, 40), "Game Over. Play again?");
-			if(GUI.Button(new Rect((Screen.width-160)/2, (Screen.height-40)/2+60 , 160, 40), "Restart")) {
+			style.alignment = TextAnchor.MiddleCenter;
+			style.fontSize = 70;
+			GUI.Label(new Rect((Screen.width-500)/2, (Screen.height+150)/2, 500, 100), "Game Over", style);
+			style.fontSize = 25;
+			GUI.Label(new Rect((Screen.width-500)/2, (Screen.height+300)/2, 500, 100), "Press any key to play again", style);
+			if(Input.anyKeyDown){
 				Application.LoadLevel("playScene");
-			}
-			if(GUI.Button(new Rect((Screen.width-160)/2, (Screen.height-40)/2+120 , 160, 40), "Main menu")) {
-				Application.LoadLevel("mainMenu");
 			}
 		}
 	}

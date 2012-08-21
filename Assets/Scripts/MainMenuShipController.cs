@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MainMenuShipController : MonoBehaviour {
 	
-	private float move = 0.005F;
+	private float move = 0.001F;
 	private float changeDelay = 8F;
 	private float lastChange = 0F;
 	

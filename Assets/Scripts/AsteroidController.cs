@@ -12,9 +12,6 @@ public class AsteroidController : MonoBehaviour {
 	void Start () {
 	}
 	
-	void OnEnable() {	
-	}
-	
 	void Update () {
 		asteroidManager = getAsteroidManager();
 		
@@ -88,10 +85,8 @@ public class AsteroidController : MonoBehaviour {
 				
 		this.transform.position = new Vector3(xPos, 0, zPos);
 		
-//		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
 		gameObject.rigidbody.velocity = new Vector3(xMove, 0, zMove);
 		gameObject.rigidbody.AddTorque(new Vector3(Random.Range(10F, 20F),Random.Range(10F, 20F),Random.Range(10F, 20F)));
-//		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);
 	}
 	
 	private GameManagerScript getGameManager() {

@@ -15,34 +15,23 @@ public class MainMenuController : MonoBehaviour {
 	public static int menuVerticalMargin = buttonHeight + 20;
 	
 	private void OnGUI () {	
-		//int xpos = (Screen.currentResolution.width-menuHeight)/2;
-		//int ypos = (Screen.currentResolution.height-menuWidth)/2;
-		int xPos, yPos;
-		centerPosition(menuHeight, menuWidth, out xPos, out yPos);
-		GUI.BeginGroup( new Rect ( xPos, yPos, menuWidth, menuHeight));
-			
-			GUI.Box(new Rect(menuInitHorizontalPos, menuInitVerticalPos, menuWidth, menuHeight), "Frogee");
-			
-			// Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
-			if(GUI.Button(new Rect(menuHorizontalMargin, menuVerticalMargin,buttonWidth,buttonHeight), "Iniciar Juego")) {
-				Application.LoadLevel("playScene");
-			}
-	
-			// Make the second button.
-			if(GUI.Button(new Rect(menuHorizontalMargin,menuVerticalMargin * 2,buttonWidth,buttonHeight), "Reglas del Juego")) {
-				Application.LoadLevel(2);
-			}
-			
-			// Make the second button.
-			if(GUI.Button(new Rect(menuHorizontalMargin,menuVerticalMargin * 3,buttonWidth,buttonHeight), "Scores")) {
-				Application.LoadLevel(2);
-			}
-			
-			// Make the second button.
-			if(GUI.Button(new Rect(menuHorizontalMargin,menuVerticalMargin * 4,buttonWidth,buttonHeight), "Salir")) {
-				Application.Quit();
-			}
-		GUI.EndGroup();
+		GUIStyle style = new GUIStyle();
+		style.fontSize = 80;
+		style.font = mySkin.font;
+		style.alignment = TextAnchor.MiddleCenter;
+		style.normal.textColor = Color.white;
+		
+		GUI.Label(new Rect((Screen.width/2)-250, 30, 500, 120), "ASTEROIDS", style);
+		
+		style.fontSize = 25;
+		style.normal.textColor = Color.yellow;
+		GUI.Label(new Rect((Screen.width-500)/2, 80, 500, 200), "Press any key to play", style);
+	}
+
+	void Update () {
+		if(Input.anyKeyDown){
+			Application.LoadLevel("playScene");
+		}
 	}
 	
 	public void centerPosition(int height, int width, out int xPos, out int yPos){
