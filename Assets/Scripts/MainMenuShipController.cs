@@ -4,7 +4,7 @@ using System.Collections;
 public class MainMenuShipController : MonoBehaviour {
 	
 	private float move = 0.005F;
-	private float changeDelay = 5F;
+	private float changeDelay = 8F;
 	private float lastChange = 0F;
 	
 	// Use this for initialization
@@ -19,6 +19,7 @@ public class MainMenuShipController : MonoBehaviour {
 			lastChange = 0F;
 		}
 		this.gameObject.transform.position += new Vector3(move, move, 0);
+		this.gameObject.transform.Rotate(new Vector3(move*2, 0, move*8));
 //		this.gameObject.transform.rotation = Quaternion.Euler(new Vector3(move, move, 0));
 	}
 }

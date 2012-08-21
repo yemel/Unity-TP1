@@ -54,9 +54,9 @@ public class ShipController : MonoBehaviour {
 		if((Time.timeSinceLevelLoad - lastCrashed) < crashLimit) return;
 
 		gameManager = getGameManager();
-		
+		Vector3 newPos = new Vector3(transform.position.x, 20, transform.position.z);
 		gameManager.decrementLives();
-		GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), gameObject.transform.position, gameObject.transform.rotation);
+		GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), newPos, transform.rotation);
 		if(gameManager.getCurrentLives() > 0) {
 			gameObject.transform.position = Vector3.zero;
 			gameObject.rigidbody.velocity = Vector3.zero;
