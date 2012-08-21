@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
+	
 public class AsteroidController : MonoBehaviour {
 	
 	private float xMove, zMove;
@@ -36,7 +37,7 @@ public class AsteroidController : MonoBehaviour {
 			GameObject bullet = other.gameObject.transform.parent.gameObject;
 			bulletManagerScript.DisableBullet(bullet);
 			Vector3 newPos = new Vector3(transform.position.x, 20, transform.position.z);
-			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), newPos, this.transform.rotation);
+			asteroidManager.instantiateExplotion(newPos);
 			asteroidManager.hitAsteroid(this.gameObject);
 		} else if(other.CompareTag("Ship")) {
 			shipController = getShipController();
@@ -104,4 +105,5 @@ public class AsteroidController : MonoBehaviour {
 		
 		return shipController;
 	}
+	
 }

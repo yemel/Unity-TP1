@@ -4,9 +4,13 @@ using System.Collections.Generic;
 public class AsteroidManagerScript : MonoBehaviour {
 
 	private List<GameObject> enableAsteroids;
-	private List<GameObject> disableAsteroids;
+	private List<GameObject> disableAsteroids;	
+	private int asteroidsCache = 50;
 	
-	public int asteroidsCache = 50;
+	private List<GameObject> enableExplotions;
+	private List<GameObject> disableExplotions;
+	private int explotionsCache = 50;
+	
 	
 	public float spawnTwoAsteroidsProb;
 	public float spawnFourAsteroidsProb;
@@ -47,6 +51,15 @@ public class AsteroidManagerScript : MonoBehaviour {
 			currAsteroid.active = false;
 			disableAsteroids.Add(currAsteroid);
         }
+		
+		enableExplotions = new List<GameObject>(explotionsCache);
+		disableExplotions = new List<GameObject>(explotionsCache);
+
+		for(int i = 0; i < explotionsCache; i++) {
+			GameObject currExplotion = (GameObject) Instantiate(Resources.Load("Explosion"));
+			currExplotion.active = false;
+			disableExplotions.Add(currExplotion);
+        }
 	}
 	
 	void Update () {
@@ -55,15 +68,17 @@ public class AsteroidManagerScript : MonoBehaviour {
 		lastChangeProabilityTime += Time.deltaTime;
 		if(lastChangeProabilityTime >= changeProabilityTime && spawnTwoAsteroidsProb < 0.5F) {
 			lastChangeProabilityTime = 0F;
-			spawnTwoAsteroidsProb += 0.025F;
-			spawnFourAsteroidsProb += 0.025F;
+			spawnTwoAsteroidsProb += 0.1F;
+			spawnFourAsteroidsProb += 0.1F;
 		}
 		
 		lastSpawnTime += Time.deltaTime;
 		
 		if(lastSpawnTime >= spawnTime) {
 			lastSpawnTime = 0F;
-			spawnTime -= 0.05F;
+			if(spawnTime > 3F) {
+				spawnTime -= 0.05F;
+			}
 			Debug.Log("saque 1");
 			spawnNewAsteroid();
 			float randSpawn = Random.Range(0F,1F);
@@ -164,5 +179,19 @@ public class AsteroidManagerScript : MonoBehaviour {
 	
 	private Vector3 randomVector3(float min, float max) {
 		return new Vector3(Random.Range(min, max),Random.Range(min, max),Random.Range(min, max));
+	}
+	
+	public void instantiateExplotion(Vector3 pos) {
+		GameObject currExplosion;
+		if(disableExplotions.Count == 0) {
+			currExplosion = (GameObject) Instantiate(Resources.Load("Explotion"));
+		} else {
+			currExplosion = disableExplotions[0];
+			disableExplotions.RemoveAt(0);			
+		}
+		enableExplotions.Add(currExplosion);
+		currExplosion.SetActiveRecursively(true);
+
+		currExplosion.transform.position = pos;
 	}
 }
