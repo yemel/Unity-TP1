@@ -19,20 +19,20 @@ public class BulletManagerScript : MonoBehaviour {
 		}
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyUp(KeyCode.Space)){
-			if(unUsedBullets.Count > 0){
-				GameObject unUsedBullet = (GameObject)unUsedBullets[0];
-				unUsedBullet.SetActiveRecursively(true);
-				BulletScript bullet = (BulletScript) unUsedBullet.GetComponent(typeof(BulletScript));
-				bullet.launch();
-				usedBullets.Add(unUsedBullet);
-				unUsedBullets.Remove(unUsedBullet);
-			}
-		}
 	}
 	
+	public void doShot() {
+		if(unUsedBullets.Count > 0){
+			GameObject unUsedBullet = (GameObject)unUsedBullets[0];
+			unUsedBullet.SetActiveRecursively(true);
+			BulletScript bullet = (BulletScript) unUsedBullet.GetComponent(typeof(BulletScript));
+			bullet.launch();
+			usedBullets.Add(unUsedBullet);
+			unUsedBullets.Remove(unUsedBullet);
+		}
+	}
+ 	
 	public void DisableBullet(GameObject bullet){
 		bullet.SetActiveRecursively(false);
 		usedBullets.Remove(bullet);

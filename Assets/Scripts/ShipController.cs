@@ -4,6 +4,7 @@ using System.Collections;
 public class ShipController : MonoBehaviour {
 	
 	private GameManagerScript gameManager;
+	private BulletManagerScript bulletManager;	
 	
 	public ParticleSystem mainThrust;
 	public float movementForce = 12;
@@ -19,6 +20,9 @@ public class ShipController : MonoBehaviour {
 	
 	void Update () {
 		updateMovement();
+		if(Input.GetKeyUp(KeyCode.Space)){
+			getBulletManager().doShot();
+		}
 	}
 	
 	private void updateMovement(){
@@ -49,12 +53,16 @@ public class ShipController : MonoBehaviour {
 
 		gameManager = getGameManager();
 		
-		GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), gameObject.transform.position, gameObject.transform.rotation);
 		gameManager.decrementLives();
-		gameObject.transform.position = Vector3.zero;
-		gameObject.rigidbody.velocity = Vector3.zero;
+		if(gameManager.getCurrentLives() > 0) {		
+			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), gameObject.transform.position, gameObject.transform.rotation);
+			gameObject.transform.position = Vector3.zero;
+			gameObject.rigidbody.velocity = Vector3.zero;
+			lastCrashed = Time.timeSinceLevelLoad;
+		} else {
+			DestroyObject(this.gameObject);
+		}
 		
-		lastCrashed = Time.timeSinceLevelLoad;
 	}
 	
 	private GameManagerScript getGameManager() {
@@ -63,5 +71,13 @@ public class ShipController : MonoBehaviour {
 		}
 		
 		return gameManager;
+	}
+
+	private BulletManagerScript getBulletManager() {
+		if(bulletManager == null) {
+			bulletManager = (BulletManagerScript) GameObject.FindGameObjectWithTag("BulletManager").GetComponent(typeof(BulletManagerScript));
+		}
+		
+		return bulletManager;
 	}
 }
