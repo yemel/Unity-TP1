@@ -4,18 +4,65 @@ using System.Collections;
 public class AsteroidController : MonoBehaviour {
 	
 	private float xMove, zMove;
+	private BulletManagerScript bulletManagerScript;
+	private AsteroidManagerScript asteroidManager;
 	
-	// Use this for initialization
 	void Start () {
-	
 	}
 	
-	void OnEnable() {
+	void OnEnable() {	
+	}
+	
+	void Update () {
+		asteroidManager = getAsteroidManager();
+		
+		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+		
+		// Deactivate the asteroid when it reachs a camera border
+		float cameraSize = (float) Camera.main.camera.orthographicSize + 10.0f;
+		if(this.transform.position.z < -cameraSize || this.transform.position.z > cameraSize ||
+			this.transform.position.x < -cameraSize || this.transform.position.x > cameraSize) {
+			asteroidManager.disableAsteroid(this.gameObject);
+		}
+	}
+	
+	void OnTriggerEnter(Collider other) {
+		asteroidManager = getAsteroidManager();
+		bulletManagerScript = getBulletManager();
+		
+		if(other.CompareTag("Bullet")) {
+			this.gameObject.active = false;
+			GameObject bullet = other.gameObject.transform.parent.gameObject;
+			bulletManagerScript.DisableBullet(bullet);
+			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), this.transform.position, this.transform.rotation);
+			asteroidManager.hitAsteroid(this.gameObject);
+		} else if(other.CompareTag("Ship")) {
+			DestroyObject(other.gameObject);
+			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), other.gameObject.transform.position, other.gameObject.transform.rotation);
+		}
+	}
+	
+	private AsteroidManagerScript getAsteroidManager() {
+		if(asteroidManager == null) {
+			asteroidManager = (AsteroidManagerScript) GameObject.FindGameObjectWithTag("AsteroidManager").GetComponent(typeof(AsteroidManagerScript));
+		}
+		
+		return asteroidManager;
+	}
+	
+	private BulletManagerScript getBulletManager() {
+		if(bulletManagerScript == null) {
+			bulletManagerScript = (BulletManagerScript) GameObject.FindGameObjectWithTag("BulletManager").GetComponent(typeof(BulletManagerScript));		}
+		
+		return bulletManagerScript;
+	}
+	
+	public void setRandomBorderPosition() {
 		float cameraSize = (float) Camera.main.camera.orthographicSize + 1.0f;
 		float xPos, zPos;
 
-		float randX = (float) UnityEngine.Random.Range(5.0f, 10.0f);
-		float randZ = (float) UnityEngine.Random.Range(5.0f, 10.0f);
+		float randX = (float) UnityEngine.Random.Range(10.0f, 12.0f);
+		float randZ = (float) UnityEngine.Random.Range(10.0f, 12.0f);
 		
 		// Choose a random spot to spawn, always on a camera border
 		float randomBorder = UnityEngine.Random.Range(0.0f, 1.0f);
@@ -37,22 +84,6 @@ public class AsteroidController : MonoBehaviour {
 		
 //		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
 		gameObject.rigidbody.velocity = new Vector3(xMove, 0, zMove);
-//		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-		
-		// Deactivate the asteroid when it reachs a camera border
-		float cameraSize = (float) Camera.main.camera.orthographicSize + 3.0f;
-		if(this.transform.position.z < -cameraSize || this.transform.position.z > cameraSize ||
-			this.transform.position.x < -cameraSize || this.transform.position.x > cameraSize) {
-			this.gameObject.SetActiveRecursively(false);
-		}
-	}
-	
-	void OnTriggerEnter(Collider other) {
-		Debug.Log("ouch with " + other.gameObject);
+//		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);
 	}
 }

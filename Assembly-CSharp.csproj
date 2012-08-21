@@ -45,10 +45,11 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\AsteroidController.cs" />
-     <Compile Include="Assets\Scripts\AsteroidManager.cs" />
+     <Compile Include="Assets\Scripts\AsteroidManagerScript.cs" />
      <Compile Include="Assets\Scripts\BulletLimitCubeScript.cs" />
      <Compile Include="Assets\Scripts\BulletManagerScript.cs" />
      <Compile Include="Assets\Scripts\BulletScript.cs" />
+     <Compile Include="Assets\Scripts\ExplosionController.cs" />
      <Compile Include="Assets\Scripts\MainMenuController.cs" />
      <Compile Include="Assets\Scripts\ScreenBoundaryConstraint.cs" />
      <Compile Include="Assets\Scripts\ShipController.cs" />
