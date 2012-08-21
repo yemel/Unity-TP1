@@ -19,11 +19,12 @@ public class AsteroidController : MonoBehaviour {
 		asteroidManager = getAsteroidManager();
 		
 		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-		
-		// Deactivate the asteroid when it reachs a camera border
-		float cameraSize = (float) Camera.main.camera.orthographicSize + 10.0f;
-		if(this.transform.position.z < -cameraSize || this.transform.position.z > cameraSize ||
-			this.transform.position.x < -cameraSize || this.transform.position.x > cameraSize) {
+
+		Vector3 cameraBounds = Camera.main.camera.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
+		cameraBounds += new Vector3(40F, 0, 40F);
+
+		if(this.transform.position.z < -cameraBounds.z || this.transform.position.z > cameraBounds.z ||
+			this.transform.position.x < -cameraBounds.x || this.transform.position.x > cameraBounds.x) {
 			asteroidManager.disableAsteroid(this.gameObject);
 		}
 	}
@@ -61,25 +62,26 @@ public class AsteroidController : MonoBehaviour {
 	}
 	
 	public void setRandomBorderPosition() {
-		float cameraSize = (float) Camera.main.camera.orthographicSize + 1.0f;
+		Vector3 cameraBounds = Camera.main.camera.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
+		cameraBounds += new Vector3(20F, 0, 20F);
+		
 		float xPos, zPos;
 
-		float randX = (float) UnityEngine.Random.Range(10.0f, 12.0f);
-		float randZ = (float) UnityEngine.Random.Range(10.0f, 12.0f);
+		float randX = (float) Random.Range(12.0f, 15.0f);
+		float randZ = (float) Random.Range(12.0f, 15.0f);
 		
-		// Choose a random spot to spawn, always on a camera border
-		float randomBorder = UnityEngine.Random.Range(0.0f, 1.0f);
+		float randomBorder = Random.Range(0.0f, 1.0f);
 		if(randomBorder < 0.5f) {
-			xPos = (float) UnityEngine.Random.Range(-cameraSize, cameraSize);
-			zPos = randomBorder > 0.25f ? -cameraSize : cameraSize;
+			xPos = (float) Random.Range(-cameraBounds.x, cameraBounds.x);
+			zPos = randomBorder > 0.25f ? -cameraBounds.z : cameraBounds.z;
 			zMove = randomBorder > 0.25f ? randZ : -randZ;
-			xMove = UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f ? randX : -randX;
+			xMove = Random.Range(0.0f, 1.0f) > 0.5f ? randX : -randX;
 			xMove /= 2;
 		} else {
-			zPos = (float) UnityEngine.Random.Range(-cameraSize, cameraSize);
-			xPos = randomBorder > 0.75f ? -cameraSize : cameraSize;
+			zPos = (float) Random.Range(-cameraBounds.z, cameraBounds.z);
+			xPos = randomBorder > 0.75f ? -cameraBounds.x : cameraBounds.x;
 			xMove = randomBorder > 0.75f ? randX : -randX;
-			zMove = UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f ? randZ : -randZ;
+			zMove = Random.Range(0.0f, 1.0f) > 0.5f ? randZ : -randZ;
 			zMove /= 2;
 		}
 				

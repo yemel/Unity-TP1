@@ -14,9 +14,7 @@ public class GameManagerScript : MonoBehaviour {
 		currentLives = 3;
 	}
 	
-	// Update is called once per frame
 	void Update () {
-		print (currentScore + " " + highScore);
 	}
 	
 	public int getHighScore() {

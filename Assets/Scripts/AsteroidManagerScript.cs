@@ -6,12 +6,16 @@ public class AsteroidManagerScript : MonoBehaviour {
 	private List<GameObject> enableAsteroids;
 	private List<GameObject> disableAsteroids;
 	
-	public int asteroidsCache = 20;
+	public int asteroidsCache = 50;
 	public float spawnTime;
 	
 	private Vector3 bigScale, mediumScale, smallScale;
 	private float lastSpawnTime;
 	
+	private static int smallScore = 277;
+	private static int mediumScore = 184;
+	private static int bigScore = 75;
+
 	private GameManagerScript gameManager;
 	
 	// Use this for initialization
@@ -33,7 +37,6 @@ public class AsteroidManagerScript : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		lastSpawnTime += Time.deltaTime;
 		if(lastSpawnTime >= spawnTime) {
@@ -52,7 +55,7 @@ public class AsteroidManagerScript : MonoBehaviour {
 		float xRand = Random.Range(0.75F,1F);
 		float zRand = Random.Range(0.75F,1F);				
 		if(asteroid.transform.localScale.Equals(bigScale)) {
-			newScore = 200;
+			newScore = bigScore;
 			for(int i = 0; i < 2; i++) {
 				GameObject currAsteroid = getAsteroid();
 				currAsteroid.transform.localScale = mediumScale;
@@ -62,15 +65,15 @@ public class AsteroidManagerScript : MonoBehaviour {
 				currAsteroid.rigidbody.AddForce(spawnDirection, ForceMode.Impulse);
 			}
 		} else if(asteroid.transform.localScale.Equals(mediumScale)) {
+			newScore = mediumScore;
 			for(int i = 0; i < 3; i++) {
 				GameObject currAsteroid = getAsteroid();
 				currAsteroid.transform.localScale = smallScale;
 				currAsteroid.transform.position = asteroid.transform.position;
 				currAsteroid.rigidbody.AddForce(xRand * 5F,0,zRand * 5F, ForceMode.Impulse);
 			}
-			newScore = 500;
 		} else {
-			newScore = 1000;	
+			newScore = smallScore;
 		}
 		
 		gameManager = getGameManager();
