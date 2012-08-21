@@ -89,6 +89,7 @@ public class AsteroidController : MonoBehaviour {
 		
 //		Debug.Log("xMove: " + xMove + " - " + "zMove: " + zMove);
 		gameObject.rigidbody.velocity = new Vector3(xMove, 0, zMove);
+		gameObject.rigidbody.AddTorque(new Vector3(Random.Range(10F, 20F),Random.Range(10F, 20F),Random.Range(10F, 20F)));
 //		gameObject.rigidbody.AddForce(new Vector3(xMove, 0, zMove) * 10, ForceMode.Impulse);
 	}
 	

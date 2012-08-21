@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ShipController : MonoBehaviour {
 	
+	public GameObject shield; 
 	private GameManagerScript gameManager;
 	private BulletManagerScript bulletManager;	
 	
@@ -23,6 +24,7 @@ public class ShipController : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.Space)){
 			getBulletManager().doShot();
 		}
+		shield.active = (Time.timeSinceLevelLoad - lastCrashed) < crashLimit;
 	}
 	
 	private void updateMovement(){

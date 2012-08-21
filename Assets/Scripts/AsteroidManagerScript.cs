@@ -61,8 +61,16 @@ public class AsteroidManagerScript : MonoBehaviour {
 		AsteroidController asteroidController = (AsteroidController) currAsteroid.GetComponent(typeof(AsteroidController));
 		asteroidController.setRandomBorderPosition();
 		currAsteroid.transform.localScale = Random.Range(0F,1F) > 0.5f ? bigScale : mediumScale;
+//		print(testPosition(asteroidController.transform.position));
 	}
 	
+	private bool testPosition(Vector3 pos) {
+		RaycastHit hit;
+		GameObject rayCast = GameObject.FindGameObjectWithTag("RayCast");
+		rayCast.transform.position = new Vector3(pos.x, 40, pos.z);
+		return rayCast.rigidbody.SweepTest(new Vector3(0, -1, 0), out hit, 60);
+	}
+ 	
 	public void hitAsteroid(GameObject asteroid) {
 		int newScore = 0;
 		Vector3 spawnDirection = Vector3.zero;
@@ -79,6 +87,8 @@ public class AsteroidManagerScript : MonoBehaviour {
 				if(i > 0)  spawnDirection = new Vector3(-xRand,0,-zRand);
 				if(i > 1)  spawnDirection = new Vector3(xRand,0,-zRand);
 				currAsteroid.rigidbody.AddForce(spawnDirection.normalized * vel, ForceMode.Impulse);
+				currAsteroid.rigidbody.AddTorque(randomVector3(10F, 20F));
+				currAsteroid.transform.rotation = Quaternion.Euler(randomVector3(0F, 180F));
 			}
 		} else if(asteroid.transform.localScale.Equals(mediumScale)) {
 			newScore = mediumScore;
@@ -90,6 +100,8 @@ public class AsteroidManagerScript : MonoBehaviour {
 				if(i > 0)  spawnDirection = new Vector3(-xRand,0,-zRand);
 				if(i > 1)  spawnDirection = new Vector3(xRand,0,-zRand);
 				currAsteroid.rigidbody.AddForce(spawnDirection.normalized * vel, ForceMode.Impulse);
+				currAsteroid.rigidbody.AddTorque(randomVector3(10F, 20F));
+				currAsteroid.transform.rotation = Quaternion.Euler(randomVector3(0F, 180F));
 			}
 		} else {
 			newScore = smallScore;
@@ -126,5 +138,8 @@ public class AsteroidManagerScript : MonoBehaviour {
 		
 		return gameManager;
 	}
-		
+	
+	private Vector3 randomVector3(float min, float max) {
+		return new Vector3(Random.Range(min, max),Random.Range(min, max),Random.Range(min, max));
+	}
 }
