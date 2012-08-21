@@ -37,7 +37,7 @@ public class AsteroidController : MonoBehaviour {
 			GameObject bullet = other.gameObject.transform.parent.gameObject;
 			bulletManagerScript.DisableBullet(bullet);
 			Vector3 newPos = new Vector3(transform.position.x, 20, transform.position.z);
-			asteroidManager.instantiateExplotion(newPos);
+			GameObject explosion = (GameObject) Instantiate(Resources.Load("Explosion"), newPos, transform.rotation);
 			asteroidManager.hitAsteroid(this.gameObject);
 		} else if(other.CompareTag("Ship")) {
 			shipController = getShipController();

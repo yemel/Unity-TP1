@@ -58,6 +58,7 @@ public class GameManagerScript : MonoBehaviour {
 			style.fontSize = 70;
 			GUI.Label(new Rect((Screen.width-500)/2, (Screen.height+150)/2, 500, 100), "Game Over", style);
 			style.fontSize = 25;
+			style.normal.textColor = Color.yellow;
 			GUI.Label(new Rect((Screen.width-500)/2, (Screen.height+300)/2, 500, 100), "Press any key to play again", style);
 			if(Input.anyKeyDown){
 				Application.LoadLevel("playScene");
