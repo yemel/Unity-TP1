@@ -14,7 +14,7 @@ public class MainMenuController : MonoBehaviour {
 	public static int menuHorizontalMargin = 20;
 	public static int menuVerticalMargin = buttonHeight + 20;
 	
-	private void OnGUI () {
+	private void OnGUI () {	
 		//int xpos = (Screen.currentResolution.width-menuHeight)/2;
 		//int ypos = (Screen.currentResolution.height-menuWidth)/2;
 		int xPos, yPos;
@@ -46,7 +46,7 @@ public class MainMenuController : MonoBehaviour {
 	}
 	
 	public void centerPosition(int height, int width, out int xPos, out int yPos){
-		xPos = (Screen.currentResolution.width-height)/2;
-		yPos = (Screen.currentResolution.height-width)/2;
+		xPos = (Screen.width-width)/2;
+		yPos = (Screen.height-height)/2;
 	}
 }
