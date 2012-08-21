@@ -41,28 +41,44 @@ public class AsteroidManagerScript : MonoBehaviour {
 		lastSpawnTime += Time.deltaTime;
 		if(lastSpawnTime >= spawnTime) {
 			lastSpawnTime = 0F;
-			GameObject currAsteroid = getAsteroid();
-			AsteroidController asteroidController = (AsteroidController) currAsteroid.GetComponent(typeof(AsteroidController));
-			asteroidController.setRandomBorderPosition();
-			currAsteroid.transform.localScale = Random.Range(0F,1F) > 0.5f ? bigScale : mediumScale;				
+			spawnTime -= 0.05F;
+			Debug.Log("saque 1");
+			spawnNewAsteroid();
+			float randSpawn = Random.Range(0F,1F);
+			if(randSpawn < 0.25F) {
+				spawnNewAsteroid();
+				Debug.Log("saque 2");
+			} else if(randSpawn < 0.1) {
+				spawnNewAsteroid();
+				spawnNewAsteroid();
+				Debug.Log("saque 4");
+			}
 		}
+	}
+	
+	private void spawnNewAsteroid() {
+		GameObject currAsteroid = getAsteroid();
+		AsteroidController asteroidController = (AsteroidController) currAsteroid.GetComponent(typeof(AsteroidController));
+		asteroidController.setRandomBorderPosition();
+		currAsteroid.transform.localScale = Random.Range(0F,1F) > 0.5f ? bigScale : mediumScale;
 	}
 	
 	public void hitAsteroid(GameObject asteroid) {
 		int newScore = 0;
-		
-		Quaternion rotationVector = Quaternion.AngleAxis(90, Vector3.forward);
-		float xRand = Random.Range(0.75F,1F);
-		float zRand = Random.Range(0.75F,1F);				
+		Vector3 spawnDirection = Vector3.zero;
+		float xRand = Random.Range(0.0F,1F);
+		float zRand = Random.Range(0.0F,1F);
+		float vel   = Random.Range(10F, 20F);
 		if(asteroid.transform.localScale.Equals(bigScale)) {
 			newScore = bigScore;
-			for(int i = 0; i < 2; i++) {
+			for(int i = 0; i < 3; i++) {
 				GameObject currAsteroid = getAsteroid();
 				currAsteroid.transform.localScale = mediumScale;
 				currAsteroid.transform.position = asteroid.transform.position;
-				Vector3 spawnDirection = new Vector3(xRand * 20F,0,zRand * 20F);
-				if(i == 1) spawnDirection = rotationVector * spawnDirection;
-				currAsteroid.rigidbody.AddForce(spawnDirection, ForceMode.Impulse);
+				if(i == 0) spawnDirection = new Vector3(xRand,0,zRand);
+				if(i > 0)  spawnDirection = new Vector3(-xRand,0,-zRand);
+				if(i > 1)  spawnDirection = new Vector3(xRand,0,-zRand);
+				currAsteroid.rigidbody.AddForce(spawnDirection.normalized * vel, ForceMode.Impulse);
 			}
 		} else if(asteroid.transform.localScale.Equals(mediumScale)) {
 			newScore = mediumScore;
@@ -70,7 +86,10 @@ public class AsteroidManagerScript : MonoBehaviour {
 				GameObject currAsteroid = getAsteroid();
 				currAsteroid.transform.localScale = smallScale;
 				currAsteroid.transform.position = asteroid.transform.position;
-				currAsteroid.rigidbody.AddForce(xRand * 5F,0,zRand * 5F, ForceMode.Impulse);
+				if(i == 0) spawnDirection = new Vector3(xRand,0,zRand);
+				if(i > 0)  spawnDirection = new Vector3(-xRand,0,-zRand);
+				if(i > 1)  spawnDirection = new Vector3(xRand,0,-zRand);
+				currAsteroid.rigidbody.AddForce(spawnDirection.normalized * vel, ForceMode.Impulse);
 			}
 		} else {
 			newScore = smallScore;

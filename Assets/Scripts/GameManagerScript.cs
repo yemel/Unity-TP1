@@ -38,7 +38,7 @@ public class GameManagerScript : MonoBehaviour {
 	}
 	
 	public void decrementLives() {
-		currentLives--;
+		if(currentLives > 0) currentLives--;
 	}
 	
 	void OnGUI () {
